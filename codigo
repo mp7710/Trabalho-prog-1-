@@ -1,0 +1,216 @@
+#include <iostream>
+#include <string>
+#include <limits>
+#include <iomanip>
+
+using namespace std;
+
+int main() {
+    const int MAX_CONTAS = 5; // Define o limite máximo de contas sugerido no desafio
+    
+    // Arrays para armazenar até 5 contas simultaneamente
+    int numeroConta[MAX_CONTAS];
+    string nomeCliente[MAX_CONTAS];
+    string cpf[MAX_CONTAS];
+    int tipoConta[MAX_CONTAS]; 
+    double saldo[MAX_CONTAS];
+    bool contaAtiva[MAX_CONTAS];
+    string senha[MAX_CONTAS];
+    double limiteCredito[MAX_CONTAS];
+    
+    // Variável para rastrear quantas contas foram cadastradas até o momento
+    int totalContas = 0; 
+    int opcao;
+
+    cout << fixed << setprecision(2);
+
+    do {
+        cout << "\n========================================\n";
+        cout << "           BANCO INF101                 \n";
+        cout << "========================================\n";
+        cout << " 1 - Cadastrar nova conta (" << totalContas << "/" << MAX_CONTAS << ")\n";
+        cout << " 2 - Consultar dados de uma conta\n";
+        cout << " 3 - Verificar saldo disponivel\n";
+        cout << " 4 - Alterar tipo de uma conta\n";
+        cout << " 5 - Ativar/Desativar uma conta\n";
+        cout << " 6 - Encerrar o sistema\n";
+        cout << "========================================\n";
+        cout << "Escolha uma opcao: ";
+        
+        if (!(cin >> opcao)) {
+            cin.clear(); 
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+            opcao = 0; 
+        }
+
+        switch(opcao) {
+            case 1: 
+                if (totalContas >= MAX_CONTAS) {
+                    cout << "\n[ERRO] O sistema atingiu o limite maximo de " << MAX_CONTAS << " contas.\n";
+                    break;
+                }
+                
+                cout << "\n>>> INICIANDO NOVO CADASTRO <<<\n";
+                
+                do {
+                    cout << "Digite o numero da conta (maior que zero): ";
+                    cin >> numeroConta[totalContas];
+                    if(numeroConta[totalContas] <= 0) cout << "  -> Valor invalido. Tente novamente.\n";
+                } while (numeroConta[totalContas] <= 0);
+                
+                cout << "Digite o nome completo do titular: ";
+                cin.ignore(); 
+                getline(cin, nomeCliente[totalContas]);
+                
+                cout << "Digite o CPF (apenas numeros): ";
+                getline(cin, cpf[totalContas]);
+
+                cout << "Crie uma senha para a conta: ";
+                getline(cin, senha[totalContas]);
+                
+                do {
+                    cout << "Selecione o tipo (1 = Corrente | 2 = Poupanca): ";
+                    cin >> tipoConta[totalContas];
+                    if(tipoConta[totalContas] != 1 && tipoConta[totalContas] != 2) cout << "  -> Tipo invalido. Escolha 1 ou 2.\n";
+                } while (tipoConta[totalContas] != 1 && tipoConta[totalContas] != 2);
+                
+                do {
+                    cout << "Digite o deposito inicial (R$): ";
+                    cin >> saldo[totalContas];
+                    if(saldo[totalContas] < 0) cout << "  -> Erro: Nao e permitido saldo negativo.\n";
+                } while (saldo[totalContas] < 0);
+
+                if (tipoConta[totalContas] == 1) {
+                    limiteCredito[totalContas] = 500.00;
+                } else {
+                    limiteCredito[totalContas] = 0.0;
+                }
+                
+                contaAtiva[totalContas] = true; 
+                
+                cout << "\n[SUCESSO] Conta numero " << numeroConta[totalContas] << " cadastrada e ativada!\n";
+                
+                totalContas++; // Incrementa o contador após o cadastro bem-sucedido
+                break;
+                
+            case 2: 
+                if (totalContas == 0) {
+                    cout << "\n[AVISO] Nenhuma conta cadastrada no sistema.\n";
+                } else {
+                    int numBusca;
+                    bool encontrada = false;
+                    cout << "Digite o numero da conta que deseja consultar: ";
+                    cin >> numBusca;
+                    
+                    // Estrutura de busca no Array
+                    for (int i = 0; i < totalContas; i++) {
+                        if (numeroConta[i] == numBusca) {
+                            encontrada = true;
+                            cout << "\n>>> DADOS DO CLIENTE <<<\n";
+                            cout << " Titular.....: " << nomeCliente[i] << "\n";
+                            cout << " CPF.........: " << cpf[i] << "\n";
+                            cout << " Conta.......: " << numeroConta[i] << "\n";
+                            cout << " Tipo........: " << (tipoConta[i] == 1 ? "Corrente" : "Poupanca") << "\n";
+                            cout << " Status......: " << (contaAtiva[i] ? "ATIVA" : "INATIVA") << "\n";
+                            if (tipoConta[i] == 1) {
+                                cout << " Limite Extra: R$ " << limiteCredito[i] << "\n";
+                            }
+                            break; // Para de procurar após encontrar
+                        }
+                    }
+                    if (!encontrada) cout << "\n[ERRO] Conta nao encontrada.\n";
+                }
+                break;
+                
+            case 3: 
+                if (totalContas == 0) {
+                    cout << "\n[AVISO] Nenhuma conta cadastrada no sistema.\n";
+                } else {
+                    int numBusca;
+                    bool encontrada = false;
+                    cout << "Digite o numero da conta para ver o saldo: ";
+                    cin >> numBusca;
+                    
+                    for (int i = 0; i < totalContas; i++) {
+                        if (numeroConta[i] == numBusca) {
+                            encontrada = true;
+                            if (!contaAtiva[i]) {
+                                cout << "\n[BLOQUEIO] Conta inativa. Reative a conta para ver o saldo.\n";
+                            } else {
+                                cout << "\n>>> SALDO DISPONIVEL <<<\n";
+                                cout << " Saldo Atual: R$ " << saldo[i] << "\n";
+                                if (tipoConta[i] == 1) {
+                                    cout << " Limite.....: R$ " << limiteCredito[i] << "\n";
+                                    cout << " Total Livre: R$ " << (saldo[i] + limiteCredito[i]) << "\n";
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    if (!encontrada) cout << "\n[ERRO] Conta nao encontrada.\n";
+                }
+                break;
+                
+            case 4: 
+                if (totalContas == 0) {
+                    cout << "\n[AVISO] Nenhuma conta cadastrada no sistema.\n";
+                } else {
+                    int numBusca;
+                    bool encontrada = false;
+                    cout << "Digite o numero da conta para alterar o tipo: ";
+                    cin >> numBusca;
+                    
+                    for (int i = 0; i < totalContas; i++) {
+                        if (numeroConta[i] == numBusca) {
+                            encontrada = true;
+                            if (!contaAtiva[i]) {
+                                cout << "\n[BLOQUEIO] Operacao negada. A conta encontra-se inativa.\n";
+                            } else {
+                                cout << "\nO tipo atual e: " << (tipoConta[i] == 1 ? "Corrente" : "Poupanca") << "\n";
+                                do {
+                                    cout << "Para qual tipo deseja mudar? (1 = Corrente | 2 = Poupanca): ";
+                                    cin >> tipoConta[i];
+                                } while (tipoConta[i] != 1 && tipoConta[i] != 2);
+                                
+                                limiteCredito[i] = (tipoConta[i] == 1) ? 500.00 : 0.0;
+                                cout << "\n[SUCESSO] O tipo da conta foi atualizado.\n";
+                            }
+                            break;
+                        }
+                    }
+                    if (!encontrada) cout << "\n[ERRO] Conta nao encontrada.\n";
+                }
+                break;
+                
+            case 5: 
+                if (totalContas == 0) {
+                    cout << "\n[AVISO] Nenhuma conta cadastrada no sistema.\n";
+                } else {
+                    int numBusca;
+                    bool encontrada = false;
+                    cout << "Digite o numero da conta para ativar ou desativar: ";
+                    cin >> numBusca;
+                    
+                    for (int i = 0; i < totalContas; i++) {
+                        if (numeroConta[i] == numBusca) {
+                            encontrada = true;
+                            contaAtiva[i] = !contaAtiva[i]; 
+                            cout << "\n[ATUALIZACAO] A conta foi " << (contaAtiva[i] ? "ATIVADA" : "DESATIVADA") << " com sucesso.\n";
+                            break;
+                        }
+                    }
+                    if (!encontrada) cout << "\n[ERRO] Conta nao encontrada.\n";
+                }
+                break;
+                
+            case 6: 
+                cout << "\nSalvando dados... Encerrando o sistema BANCO INF101.\n";
+                break;
+                
+            default:
+                cout << "\n[ERRO] Opcao invalida. Escolha um numero de 1 a 6.\n";
+        }
+    } while(opcao != 6);
+
+    return 0;
+}
