@@ -160,11 +160,3 @@ Consulta de saldo da conta cadastrada:
  Total Livre: R$ 750.00
 ```
 
-## Limitações e próximas etapas
-
-Conforme a proposta do trabalho, as limitações de cada etapa motivam o conteúdo da etapa seguinte. Na versão atual, observam-se as seguintes limitações:
-
-- **Código concentrado na função `main`:** a lógica de busca de conta é repetida em várias opções do menu. Na próxima etapa, com o estudo de funções, essa lógica poderá ser modularizada e reaproveitada.
-- **Dados mantidos apenas em memória:** todas as informações são perdidas ao encerrar o programa. A etapa final, que aborda persistência de dados em arquivos, permitirá salvar e recuperar as contas cadastradas.
-- **Código de validação repetido:** o tratamento de entradas inválidas se repete em várias leituras. Com o uso de funções, esse tratamento poderá ser centralizado em uma única rotina de leitura.
-- **Validações ainda simples:** o formato do CPF não é validado, e a senha cadastrada ainda não é utilizada para autenticar operações.
