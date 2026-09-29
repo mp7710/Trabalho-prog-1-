@@ -191,7 +191,7 @@ Conforme a proposta do trabalho, as limitações de uma etapa servem de motivaç
 Clone o repositório e acesse o diretório do projeto:
 
 ```bash
-git clone https://github.com/SEU-USUARIO/banco-inf101.git
+git clone https://github.com/mp7710/github-api-exercise
 cd banco-inf101
 ```
 
