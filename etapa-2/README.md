@@ -174,11 +174,11 @@ O programa foi feito em **C++** usando os arrays globais pedidos no enunciado e 
 
 | Opção | Função | O que faz |
 |:---:|---|---|
-| 1 | `cadastrarConta()` | Lê número, nome, CPF e tipo (1-Corrente / 2-Poupança); começa com saldo 0 e conta ativa; respeita o limite de 100 contas |
+| 1 | `cadastrarConta()` | Lê número, nome, CPF e tipo (1-Corrente / 2-Poupança); **não permite número de conta repetido**; começa com saldo 0 e conta ativa; respeita o limite de 100 contas |
 | 2 | `listarContas()` | Mostra número, cliente e saldo de todas as contas ativas |
 | 3 | `consultarConta()` | Busca pelo número e mostra cliente, CPF, tipo e saldo |
 | 4 | `depositar()` | Valida valor positivo, soma ao saldo e registra `D` no histórico |
-| 5 | `sacar()` | Valida valor positivo e saldo suficiente, subtrai e registra `S` |
+| 5 | `sacar()` | Valida valor positivo e saldo suficiente, subtrai e registra `S`; avisa se o histórico estiver cheio |
 | 6 | `transferir()` | Localiza as duas contas, valida valor e saldo, confere espaço para 2 registros, atualiza os saldos e registra `S` (origem) e `D` (destino) |
 | 7 | `exibirExtrato()` | Percorre o histórico e mostra só as movimentações da conta informada |
 
