@@ -15,7 +15,7 @@ Trabalho: *Implementação de um Sistema de Registro e Gestão de Contas Bancár
 | Item | Detalhe |
 |---|---|
 | Valor | 8 pontos |
-| Data | 11/11/2026 (ou 04/11/2026, se preferir) |
+| Data | 29/10/2026 |
 | Formato | Código organizado no GitHub e link compartilhado na planilha do professor |
 | Apresentação | Mostrar o programa funcionando no laboratório |
 
