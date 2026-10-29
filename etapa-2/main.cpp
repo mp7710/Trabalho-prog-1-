@@ -26,8 +26,18 @@ void cadastrarConta() {
     }
     
     cout << "\n--- CADASTRAR CONTA ---\n";
+    int num;
     cout << "Numero da conta: ";
-    cin >> numeroConta[quantidadeContas];
+    cin >> num;
+
+    // Verifica se ja existe uma conta com esse numero
+    for (int i = 0; i < quantidadeContas; i++) {
+        if (numeroConta[i] == num) {
+            cout << "Erro: ja existe uma conta com esse numero!\n";
+            return;
+        }
+    }
+    numeroConta[quantidadeContas] = num;
     
     cout << "Nome do cliente: ";
     cin.ignore();
