@@ -4,7 +4,7 @@
 using namespace std;
 
 // Arrays globais para facilitar o acesso nas funções (típico de 2º período)
-const int MAX_CONTAS = 100; // limite máximo de 100 contas[cite: 2]
+const int MAX_CONTAS = 100; // limite máximo de 100 contas
 int numeroConta[MAX_CONTAS];
 string nomeCliente[MAX_CONTAS];
 string cpf[MAX_CONTAS];
@@ -89,12 +89,12 @@ void depositar() {
             cout << "Valor do deposito: R$ ";
             cin >> valor;
             if (valor > 0) {
-                saldo[i] = saldo[i] + valor; // Atualiza o saldo[cite: 2]
+                saldo[i] = saldo[i] + valor; // Atualiza o saldo
                 
                 // Registar a movimentacao
                 if (quantidadeMovimentacoes < MAX_MOVIMENTACOES) {
                     contaMovimentacao[quantidadeMovimentacoes] = numeroConta[i];
-                    tipoMovimentacao[quantidadeMovimentacoes] = 'D'; // D = Deposito[cite: 2]
+                    tipoMovimentacao[quantidadeMovimentacoes] = 'D'; // D = Deposito
                     valorMovimentacao[quantidadeMovimentacoes] = valor;
                     quantidadeMovimentacoes++;
                     cout << "Deposito realizado com sucesso!\n";
@@ -125,10 +125,12 @@ void sacar() {
                 
                 if (quantidadeMovimentacoes < MAX_MOVIMENTACOES) {
                     contaMovimentacao[quantidadeMovimentacoes] = numeroConta[i];
-                    tipoMovimentacao[quantidadeMovimentacoes] = 'S'; // S = Saque[cite: 2]
+                    tipoMovimentacao[quantidadeMovimentacoes] = 'S'; // S = Saque
                     valorMovimentacao[quantidadeMovimentacoes] = valor;
                     quantidadeMovimentacoes++;
                     cout << "Saque realizado com sucesso!\n";
+                } else {
+                    cout << "Historico de movimentacoes cheio!\n";
                 }
             } else {
                 cout << "Saldo insuficiente ou valor invalido!\n";
@@ -162,19 +164,19 @@ void transferir() {
         cin >> valor;
         
         if (valor > 0 && saldo[indiceOrigem] >= valor) {
-            // Verifica se ha espaco para os DOIS registos de movimentacao[cite: 3]
+            // Verifica se ha espaco para os DOIS registos de movimentacao
             if (quantidadeMovimentacoes + 1 < MAX_MOVIMENTACOES) {
                 
-                saldo[indiceOrigem] = saldo[indiceOrigem] - valor;[cite: 3]
-                saldo[indiceDestino] = saldo[indiceDestino] + valor;[cite: 3]
+                saldo[indiceOrigem] = saldo[indiceOrigem] - valor;
+                saldo[indiceDestino] = saldo[indiceDestino] + valor;
 
-                // Registo da saida (Conta Origem)[cite: 3]
+                // Registo da saida (Conta Origem)
                 contaMovimentacao[quantidadeMovimentacoes] = numeroConta[indiceOrigem];
                 tipoMovimentacao[quantidadeMovimentacoes] = 'S';
                 valorMovimentacao[quantidadeMovimentacoes] = valor;
                 quantidadeMovimentacoes++;
 
-                // Registo da entrada (Conta Destino)[cite: 3]
+                // Registo da entrada (Conta Destino)
                 contaMovimentacao[quantidadeMovimentacoes] = numeroConta[indiceDestino];
                 tipoMovimentacao[quantidadeMovimentacoes] = 'D';
                 valorMovimentacao[quantidadeMovimentacoes] = valor;
@@ -201,12 +203,12 @@ void exibirExtrato() {
     bool teveMovimentacao = false;
     
     for (int i = 0; i < quantidadeMovimentacoes; i++) {
-        if (contaMovimentacao[i] == num) { // filtra so a conta pedida[cite: 4]
+        if (contaMovimentacao[i] == num) { // filtra so a conta pedida
             teveMovimentacao = true;
-            if (tipoMovimentacao[i] == 'D') { //[cite: 4]
-                cout << "Deposito: R$ " << valorMovimentacao[i] << endl; //[cite: 4]
-            } else if (tipoMovimentacao[i] == 'S') { //[cite: 4]
-                cout << "Saque/Transf: R$ " << valorMovimentacao[i] << endl; //[cite: 4]
+            if (tipoMovimentacao[i] == 'D') { //
+                cout << "Deposito: R$ " << valorMovimentacao[i] << endl; //
+            } else if (tipoMovimentacao[i] == 'S') { //
+                cout << "Saque/Transf: R$ " << valorMovimentacao[i] << endl; //
             }
         }
     }
