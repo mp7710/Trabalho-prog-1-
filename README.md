@@ -3,13 +3,14 @@
 > ## 📂 Etapas do trabalho
 > | Etapa | Onde está |
 > |---|---|
-> | Etapa 1 – variáveis, decisão e repetição | Raiz deste repositório (este README) |
+> | Etapa 1 – variáveis, decisão e repetição (feita em 03/09/2026) | Raiz deste repositório (este README) |
 > | **Etapa 2 – várias contas com arrays e histórico de movimentações** | [`etapa-2/`](etapa-2/) → [README da Etapa 2](etapa-2/README.md) |
 
 **Centro Universitário de Viçosa (UNIVIÇOSA)**
 **Disciplina:** INF101 – Programação de Computadores I
 **Professores:** Anderson R. Lamas e Vanderlea Queiroz
 **Trabalho:** Implementação de um Sistema de Registro e Gestão de Contas Bancárias – Etapa 1
+**Data de realização:** 03/09/2026
 **Aluno:** Maurílio Pereira-25440
 
 ## Sumário
