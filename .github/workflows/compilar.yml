@@ -1,0 +1,13 @@
+name: Compilar
+on: [push, pull_request]
+jobs:
+  compilar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compilar todas as etapas
+        run: |
+          for f in etapa-*/*.cpp; do
+            echo "== $f"
+            g++ -Wall -Wextra -std=c++17 "$f" -o /tmp/programa
+          done
