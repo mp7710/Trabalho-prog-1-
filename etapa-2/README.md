@@ -208,3 +208,11 @@ sistema_bancario.exe
 ├── enunciado-etapa2.pdf   # Enunciado do trabalho
 └── README.md
 ```
+
+---
+
+## 🔧 Correções depois da entrega
+
+- Transferência para a **mesma conta** agora é recusada.
+- Se o usuário digitar **letra em campo numérico**, o programa avisa e pede de novo (antes o menu ficava em loop).
+- O tipo da conta só aceita 1 (Corrente) ou 2 (Poupança).

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <limits>
 
 using namespace std;
 
@@ -19,6 +20,28 @@ char tipoMovimentacao[MAX_MOVIMENTACOES];
 double valorMovimentacao[MAX_MOVIMENTACOES];
 int quantidadeMovimentacoes = 0;
 
+// Le um numero inteiro; se o usuario digitar texto, limpa o erro e pede de novo
+int lerInteiro() {
+    int x;
+    while (!(cin >> x)) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Entrada invalida! Digite um numero: ";
+    }
+    return x;
+}
+
+// Le um valor em reais; se o usuario digitar texto, limpa o erro e pede de novo
+double lerValor() {
+    double x;
+    while (!(cin >> x)) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Entrada invalida! Digite um valor: R$ ";
+    }
+    return x;
+}
+
 void cadastrarConta() {
     if (quantidadeContas >= MAX_CONTAS) {
         cout << "Erro: Limite maximo de contas atingido!\n";
@@ -28,7 +51,7 @@ void cadastrarConta() {
     cout << "\n--- CADASTRAR CONTA ---\n";
     int num;
     cout << "Numero da conta: ";
-    cin >> num;
+    num = lerInteiro();
 
     // Verifica se ja existe uma conta com esse numero
     for (int i = 0; i < quantidadeContas; i++) {
@@ -40,14 +63,18 @@ void cadastrarConta() {
     numeroConta[quantidadeContas] = num;
     
     cout << "Nome do cliente: ";
-    cin.ignore();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     getline(cin, nomeCliente[quantidadeContas]);
     
     cout << "CPF: ";
     cin >> cpf[quantidadeContas];
     
     cout << "Tipo de conta (1-Corrente, 2-Poupanca): ";
-    cin >> tipoConta[quantidadeContas];
+    tipoConta[quantidadeContas] = lerInteiro();
+    while (tipoConta[quantidadeContas] != 1 && tipoConta[quantidadeContas] != 2) {
+        cout << "Tipo invalido! Digite 1 (Corrente) ou 2 (Poupanca): ";
+        tipoConta[quantidadeContas] = lerInteiro();
+    }
 
     saldo[quantidadeContas] = 0.0;
     contaAtiva[quantidadeContas] = true;
@@ -70,7 +97,7 @@ void listarContas() {
 void consultarConta() {
     int num;
     cout << "\nDigite o numero da conta: ";
-    cin >> num;
+    num = lerInteiro();
     
     bool achou = false;
     for (int i = 0; i < quantidadeContas; i++) {
@@ -92,12 +119,12 @@ void depositar() {
     int num;
     double valor;
     cout << "\nNumero da conta para deposito: ";
-    cin >> num;
+    num = lerInteiro();
     
     for (int i = 0; i < quantidadeContas; i++) {
         if (numeroConta[i] == num && contaAtiva[i]) {
             cout << "Valor do deposito: R$ ";
-            cin >> valor;
+            valor = lerValor();
             if (valor > 0) {
                 saldo[i] = saldo[i] + valor; // Atualiza o saldo
                 
@@ -124,12 +151,12 @@ void sacar() {
     int num;
     double valor;
     cout << "\nNumero da conta para saque: ";
-    cin >> num;
+    num = lerInteiro();
     
     for (int i = 0; i < quantidadeContas; i++) {
         if (numeroConta[i] == num && contaAtiva[i]) {
             cout << "Valor do saque: R$ ";
-            cin >> valor;
+            valor = lerValor();
             if (valor > 0 && saldo[i] >= valor) {
                 saldo[i] = saldo[i] - valor;
                 
@@ -156,9 +183,14 @@ void transferir() {
     double valor;
     
     cout << "\nNumero da conta de ORIGEM: ";
-    cin >> numOrigem;
+    numOrigem = lerInteiro();
     cout << "Numero da conta de DESTINO: ";
-    cin >> numDestino;
+    numDestino = lerInteiro();
+
+    if (numOrigem == numDestino) {
+        cout << "Erro: a conta de origem e a de destino sao a mesma!\n";
+        return;
+    }
 
     int indiceOrigem = -1;
     int indiceDestino = -1;
@@ -171,7 +203,7 @@ void transferir() {
 
     if (indiceOrigem != -1 && indiceDestino != -1) {
         cout << "Valor da transferencia: R$ ";
-        cin >> valor;
+        valor = lerValor();
         
         if (valor > 0 && saldo[indiceOrigem] >= valor) {
             // Verifica se ha espaco para os DOIS registos de movimentacao
@@ -207,7 +239,7 @@ void transferir() {
 void exibirExtrato() {
     int num;
     cout << "\nNumero da conta para extrato: ";
-    cin >> num;
+    num = lerInteiro();
     
     cout << "\n--- EXTRATO DA CONTA " << num << " ---\n";
     bool teveMovimentacao = false;
@@ -243,7 +275,7 @@ int main() {
         cout << "0. Sair\n";
         cout << "======================================\n";
         cout << "Escolha uma opcao: ";
-        cin >> opcao;
+        opcao = lerInteiro();
 
         switch (opcao) {
             case 1: cadastrarConta(); break;
