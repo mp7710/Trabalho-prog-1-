@@ -4,7 +4,8 @@
 > | Etapa | Onde está |
 > |---|---|
 > | Etapa 1 – variáveis, decisão e repetição (feita em 03/09/2026) | Raiz deste repositório (este README) |
-> | **Etapa 2 – várias contas com arrays e histórico de movimentações** | [`etapa-2/`](etapa-2/) → [README da Etapa 2](etapa-2/README.md) |
+> | Etapa 2 – várias contas com arrays e histórico de movimentações | [`etapa-2/`](etapa-2/) → [README da Etapa 2](etapa-2/README.md) |
+> | **Etapa 3 – persistência dos dados em arquivos (`contas.txt` e `movimentacoes.txt`)** | [`etapa-3/`](etapa-3/) → [README da Etapa 3](etapa-3/README.md) |
 
 **Centro Universitário de Viçosa (UNIVIÇOSA)**
 **Disciplina:** INF101 – Programação de Computadores I
