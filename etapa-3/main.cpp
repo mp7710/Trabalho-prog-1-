@@ -67,6 +67,50 @@ double lerValor() {
     return valor;
 }
 
+// Le uma palavra (ex.: CPF). Se a entrada acabar, salva e sai.
+string lerPalavra() {
+    string texto;
+    if (!(cin >> texto)) {
+        salvarContas();
+        salvarMovimentacoes();
+        exit(0);
+    }
+    return texto;
+}
+
+// Le uma linha inteira (ex.: nome). Se a entrada acabar, salva e sai.
+string lerLinha() {
+    string texto;
+    if (!getline(cin, texto)) {
+        salvarContas();
+        salvarMovimentacoes();
+        exit(0);
+    }
+    return texto;
+}
+
+// Converte texto em numero sem derrubar o programa.
+// Devolve false se o texto nao for um numero valido.
+bool converterInteiro(const string& texto, int& resultado) {
+    try {
+        size_t lidos = 0;
+        resultado = stoi(texto, &lidos);
+        return lidos == texto.size();
+    } catch (...) {
+        return false;
+    }
+}
+
+bool converterValor(const string& texto, double& resultado) {
+    try {
+        size_t lidos = 0;
+        resultado = stod(texto, &lidos);
+        return lidos == texto.size();
+    } catch (...) {
+        return false;
+    }
+}
+
 // Procura a conta pelo numero e devolve o indice no array (ou -1)
 int buscarConta(int num) {
     for (int i = 0; i < quantidadeContas; i++) {
@@ -149,15 +193,28 @@ void carregarContas() {
         campo[qtdCampos] = atual;
         qtdCampos++;
 
-        if (qtdCampos != 6) continue; // linha com formato errado
+        // Linha com formato errado ou numero invalido: avisa e pula, sem derrubar o programa
+        int num, tipo;
+        double valorSaldo;
+        if (qtdCampos != 6 || !converterInteiro(campo[0], num) ||
+            !converterInteiro(campo[3], tipo) || !converterValor(campo[4], valorSaldo)) {
+            cout << "Aviso: linha invalida ignorada em " << ARQUIVO_CONTAS << ": " << linha << "\n";
+            continue;
+        }
 
-        numeroConta[quantidadeContas] = stoi(campo[0]);
+        numeroConta[quantidadeContas] = num;
         nomeCliente[quantidadeContas] = campo[1];
         cpf[quantidadeContas] = campo[2];
-        tipoConta[quantidadeContas] = stoi(campo[3]);
-        saldo[quantidadeContas] = stod(campo[4]);
+        tipoConta[quantidadeContas] = tipo;
+        saldo[quantidadeContas] = valorSaldo;
         contaAtiva[quantidadeContas] = (campo[5] == "1");
         quantidadeContas++;
+    }
+
+    // Avisa se o arquivo tinha mais contas do que o sistema comporta
+    if (quantidadeContas == MAX_CONTAS && getline(arquivo, linha)) {
+        cout << "Aviso: " << ARQUIVO_CONTAS << " tem mais de " << MAX_CONTAS
+             << " contas; as excedentes foram ignoradas.\n";
     }
 
     arquivo.close();
@@ -181,10 +238,26 @@ void carregarMovimentacoes() {
         size_t p2 = linha.find(';', p1 + 1);
         if (p1 == string::npos || p2 == string::npos) continue;
 
-        contaMovimentacao[quantidadeMovimentacoes] = stoi(linha.substr(0, p1));
+        int conta;
+        double valor;
+        string textoValor = linha.substr(p2 + 1);
+        if (!textoValor.empty() && textoValor[textoValor.size() - 1] == '\r') {
+            textoValor.erase(textoValor.size() - 1); // \r de arquivos do Windows
+        }
+        if (!converterInteiro(linha.substr(0, p1), conta) || !converterValor(textoValor, valor)) {
+            cout << "Aviso: linha invalida ignorada em " << ARQUIVO_MOVIMENTACOES << ": " << linha << "\n";
+            continue;
+        }
+
+        contaMovimentacao[quantidadeMovimentacoes] = conta;
         tipoMovimentacao[quantidadeMovimentacoes] = linha[p1 + 1];
-        valorMovimentacao[quantidadeMovimentacoes] = stod(linha.substr(p2 + 1));
+        valorMovimentacao[quantidadeMovimentacoes] = valor;
         quantidadeMovimentacoes++;
+    }
+
+    if (quantidadeMovimentacoes == MAX_MOVIMENTACOES && getline(arquivo, linha)) {
+        cout << "Aviso: " << ARQUIVO_MOVIMENTACOES << " tem mais de " << MAX_MOVIMENTACOES
+             << " movimentacoes; as excedentes foram ignoradas.\n";
     }
 
     arquivo.close();
@@ -228,19 +301,19 @@ void cadastrarConta() {
     string nome;
     cout << "Nome do cliente: ";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    getline(cin, nome);
+    nome = lerLinha();
     // O ';' e o separador do arquivo, entao nao pode aparecer no nome
     while (nome.empty() || nome.find(';') != string::npos) {
         cout << "Nome invalido (nao pode ser vazio nem conter ';'). Digite novamente: ";
-        getline(cin, nome);
+        nome = lerLinha();
     }
 
     string cpfDigitado;
     cout << "CPF: ";
-    cin >> cpfDigitado;
+    cpfDigitado = lerPalavra();
     while (cpfDigitado.find(';') != string::npos) {
         cout << "CPF invalido (nao pode conter ';'). Digite novamente: ";
-        cin >> cpfDigitado;
+        cpfDigitado = lerPalavra();
     }
 
     cout << "Tipo de conta (1-Corrente, 2-Poupanca): ";
